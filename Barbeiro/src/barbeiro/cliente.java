@@ -23,9 +23,11 @@ public class cliente implements Runnable {
                
             if(b.cadeiras.tryAcquire()){
                     b.cadeiras.acquire();
+                    b.semNinguem.release();
                     
                    
-                    if(b.dormindo.hasQueuedThreads()) b.dormindo.release();
+                    if(b.dormindo.tryAcquire()) b.dormindo.release(3);
+                    else b.dormindo.release();
                     System.out.println(i++);
                     b.eperaSentar.release();
                     b.cortando.acquire();

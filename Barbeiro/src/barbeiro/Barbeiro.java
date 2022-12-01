@@ -54,10 +54,11 @@ public class barbeiro implements Runnable{
         while(true){
             try{
                 
-                if(!b.cadeiras.hasQueuedThreads()){
+                if(!b.semNinguem.tryAcquire()){
                     System.out.println("A mimir...");
-                    b.dormindo.acquire();
+                    b.dormindo.acquire(2);
                 }
+                else b.semNinguem.release();
                 
                     b.eperaSentar.acquire();
                     System.out.println("Cortando na frente, picando atrás");
