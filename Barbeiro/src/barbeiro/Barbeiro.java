@@ -4,6 +4,7 @@
  */
 package barbeiro;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -11,8 +12,8 @@ import java.util.concurrent.TimeUnit;
  * @author Gustavo
  */
 public class barbeiro implements Runnable{
-    boolean dormindo = true, cortandoCabelo = false;
-    int tempoParaCorte = 3;
+    static boolean dormindo = true, cortandoCabelo = false;
+    int tempoParaCorte = 1;
     static barbearia b = new barbearia(5);
     
     /**
@@ -28,13 +29,16 @@ public class barbeiro implements Runnable{
         int l = 0;
         
         
-        while(l < 10)
-        {
-        Thread cliente = new Thread(new cliente());
-        cliente.start();
+        while(l < 100)
+        { 
+            Random chegouCliente = new Random();
+        if(chegouCliente.nextInt(100) > 80){
+            Thread cliente = new Thread(new cliente());
+            cliente.start();
+        }
         System.out.println(l);
         try{
-         //TimeUnit.SECONDS.sleep(1);
+         TimeUnit.SECONDS.sleep(1);
         }
         catch(Exception e)
         {}
@@ -53,7 +57,33 @@ public class barbeiro implements Runnable{
         while(true){
             try{
                 
-                if(b.semNinguem.tryAcquire()){
+                b.dormindo.acquire();
+                if(b.semNinguem.availablePermits() > 0){
+                    System.out.println(b.semNinguem.availablePermits());
+                   
+                    b.dormindo.release();
+                    
+                    
+                    b.eperaSentar.acquire();
+                    System.out.println("Cortando na frente, picando atras");       
+                    TimeUnit.SECONDS.sleep(tempoParaCorte);
+                    b.aguarde.release();
+             
+                    b.cortando.release();
+                }
+                else{
+                    
+                    
+                    System.out.println("A mimir...");
+                    try{
+                        TimeUnit.SECONDS.sleep(1);
+                    }
+                    catch(Exception e)
+                    {}
+                    b.dormindo.release();
+                }
+                
+                /*if(b.semNinguem.tryAcquire()){
                     b.semNinguem.release();
                     // System.out.println("senta");
                     b.eperaSentar.acquire();
@@ -63,8 +93,8 @@ public class barbeiro implements Runnable{
                 }
                 else{
                     System.out.println("A mimir...");
-                    b.dormindo.acquire(2);
-                }
+                    wait();
+                }*/
                    
                 
                 

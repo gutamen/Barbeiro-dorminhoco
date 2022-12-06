@@ -18,10 +18,38 @@ public class cliente implements Runnable {
 
             if(b.cadeiras.tryAcquire()){
                 
+                
+
+                b.dormindo.acquire();
+                b.semNinguem.release();
+                if(barbeiro.dormindo)
+                    barbeiro.dormindo = false;
+                b.dormindo.release();
+                
+                
+                b.cortando.acquire();
+                b.eperaSentar.release();
+                b.aguarde.acquire();
+                System.out.println("Tomei uma picada " + o++);
+                b.cadeiras.release();
+                b.semNinguem.acquire();
+            }
+            else{
+                 
+                System.out.println("ta chei fui embora " + p++);
+            }
+        }
+
+        catch(Exception e)
+        {}
+        
+        /*try{
+
+            if(b.cadeiras.tryAcquire()){
+                
                 b.semNinguem.release();
 
-                if(b.dormindo.tryAcquire()) b.dormindo.release();
-                else b.dormindo.release(2);
+                notify();
                 
                 b.eperaSentar.release();
                 b.cortando.acquire();
@@ -37,7 +65,7 @@ public class cliente implements Runnable {
         }
 
         catch(Exception e)
-        {}
+        {}*/
 
         
     }
