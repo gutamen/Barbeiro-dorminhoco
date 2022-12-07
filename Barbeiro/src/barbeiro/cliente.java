@@ -30,7 +30,7 @@ public class cliente implements Runnable {
                 
                 b.cortando.acquire();
                
-                System.out.println("Valeu pelo corte" + o++);
+                System.out.println("Valeu pelo corte " + o++);
                 
                 b.cadeiras.release();
                 b.semNinguem.acquire();

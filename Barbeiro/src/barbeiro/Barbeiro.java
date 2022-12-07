@@ -27,18 +27,20 @@ public class barbeiro implements Runnable{
         Thread cortador = new Thread(new barbeiro());
         cortador.start();
         int podeChegarGente = 0;
-        
+        int chegouAlguem = 0;
         
         while(podeChegarGente < 40)
         { 
+            
             Random chegouCliente = new Random();
-        if(chegouCliente.nextInt(100) > 65){
+        if(chegouCliente.nextInt(100) > 40){
             Thread cliente = new Thread(new cliente());
             cliente.start();
+            System.out.println(chegouAlguem++);
         }
-        System.out.println(podeChegarGente++);
+        
         try{
-         TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(1);
         }
         catch(Exception e)
         {}
@@ -57,7 +59,7 @@ public class barbeiro implements Runnable{
                 
                 b.dormindo.acquire();
                 if(b.semNinguem.availablePermits() > 0 ){
-                    System.out.println(b.semNinguem.availablePermits());
+                    //System.out.println(b.semNinguem.availablePermits());
                    
                     b.dormindo.release();
                     
