@@ -13,17 +13,16 @@ import java.util.concurrent.Semaphore;
 class barbearia{
     
     int quantasCadeiras;
-    Semaphore cadeiras,cortando,dormindo,eperaSentar,semNinguem,aguarde;
+    Semaphore cadeiras,cortando,dormindo,semNinguem;
 
     public barbearia(int _quantasCadeiras){
         
         this.quantasCadeiras=_quantasCadeiras;
-        this.cortando = new Semaphore(1);
+        this.cortando = new Semaphore(0);
         this.cadeiras = new Semaphore(_quantasCadeiras);
-        this.eperaSentar = new Semaphore(0);
         this.semNinguem = new Semaphore(0);
         this.dormindo = new Semaphore(1);
-        this.aguarde = new Semaphore(0);
+        
 
     }
 }

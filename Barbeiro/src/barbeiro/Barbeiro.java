@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
  * @author Gustavo
  */
 public class barbeiro implements Runnable{
-    static boolean dormindo = true, cortandoCabelo = false;
-    int tempoParaCorte = 1;
-    static barbearia b = new barbearia(5);
+    static boolean dormindo = false;
+    int tempoParaCorte = 2; 
+    static barbearia b = new barbearia(2);
     
     /**
      * @param args the command line arguments
@@ -26,29 +26,27 @@ public class barbeiro implements Runnable{
         
         Thread cortador = new Thread(new barbeiro());
         cortador.start();
-        int l = 0;
+        int podeChegarGente = 0;
         
         
-        while(l < 100)
+        while(podeChegarGente < 40)
         { 
             Random chegouCliente = new Random();
-        if(chegouCliente.nextInt(100) > 80){
+        if(chegouCliente.nextInt(100) > 65){
             Thread cliente = new Thread(new cliente());
             cliente.start();
         }
-        System.out.println(l);
+        System.out.println(podeChegarGente++);
         try{
          TimeUnit.SECONDS.sleep(1);
         }
         catch(Exception e)
         {}
-        //Thread t2 = new Thread(new consumidor(b));
-        l++;
         }
         
         
         
-        System.out.println("Fim prod/cons");
+        System.out.println("Fim de Expediente, deixa eu dormi em paz");
     
     }
     
@@ -58,44 +56,30 @@ public class barbeiro implements Runnable{
             try{
                 
                 b.dormindo.acquire();
-                if(b.semNinguem.availablePermits() > 0){
+                if(b.semNinguem.availablePermits() > 0 ){
                     System.out.println(b.semNinguem.availablePermits());
                    
                     b.dormindo.release();
                     
                     
-                    b.eperaSentar.acquire();
-                    System.out.println("Cortando na frente, picando atras");       
+                    
+                    System.out.println("Cortando cabelo");       
                     TimeUnit.SECONDS.sleep(tempoParaCorte);
-                    b.aguarde.release();
+                    
              
                     b.cortando.release();
+                    b.dormindo.acquire();//tirar causa uma nao-solucao
                 }
                 else{
                     
-                    
-                    System.out.println("A mimir...");
-                    try{
-                        TimeUnit.SECONDS.sleep(1);
+                    if(!barbeiro.dormindo){
+                        System.out.println("A mimir...");
+                        barbeiro.dormindo = true;
                     }
-                    catch(Exception e)
-                    {}
+                    
                     b.dormindo.release();
                 }
                 
-                /*if(b.semNinguem.tryAcquire()){
-                    b.semNinguem.release();
-                    // System.out.println("senta");
-                    b.eperaSentar.acquire();
-                    System.out.println("Cortando na frente, picando atrás");
-                    TimeUnit.SECONDS.sleep(tempoParaCorte);
-                    b.cortando.release();
-                }
-                else{
-                    System.out.println("A mimir...");
-                    wait();
-                }*/
-                   
                 
                 
             }

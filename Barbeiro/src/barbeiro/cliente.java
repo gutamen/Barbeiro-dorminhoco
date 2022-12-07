@@ -18,21 +18,23 @@ public class cliente implements Runnable {
 
             if(b.cadeiras.tryAcquire()){
                 
-                
 
                 b.dormindo.acquire();
                 b.semNinguem.release();
-                if(barbeiro.dormindo)
+                if(barbeiro.dormindo){
                     barbeiro.dormindo = false;
+                    System.out.println("Acorda fi do caum");
+                }
                 b.dormindo.release();
                 
                 
                 b.cortando.acquire();
-                b.eperaSentar.release();
-                b.aguarde.acquire();
-                System.out.println("Tomei uma picada " + o++);
+               
+                System.out.println("Valeu pelo corte" + o++);
+                
                 b.cadeiras.release();
                 b.semNinguem.acquire();
+                b.dormindo.release();//tirar causa uma nao-solucao
             }
             else{
                  
@@ -43,31 +45,7 @@ public class cliente implements Runnable {
         catch(Exception e)
         {}
         
-        /*try{
 
-            if(b.cadeiras.tryAcquire()){
-                
-                b.semNinguem.release();
-
-                notify();
-                
-                b.eperaSentar.release();
-                b.cortando.acquire();
-                System.out.println("Tomei uma picada " + o++);
-                b.cadeiras.release();
-
-                b.semNinguem.acquire();
-            }
-            else{
-                //b.cadeiras.release(); 
-                System.out.println("ta chei fui embora " + p++);
-            }
-        }
-
-        catch(Exception e)
-        {}*/
-
-        
     }
             
     
