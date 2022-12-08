@@ -6,10 +6,7 @@ package barbeiro;
 
 import java.util.concurrent.Semaphore;
 
-/**
- *
- * @author Gustavo
- */
+
 class barbearia{
     
     int quantasCadeiras;

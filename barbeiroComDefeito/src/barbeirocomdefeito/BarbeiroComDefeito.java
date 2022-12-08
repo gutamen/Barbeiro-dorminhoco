@@ -4,16 +4,14 @@
  */
 package barbeirocomdefeito;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/**
- *
- * @author Gustavo
- */
+
 public class BarbeiroComDefeito implements Runnable{
-    boolean dormindo = true, cortandoCabelo = false;
-    int tempoParaCorte = 3;
-    static barbearia b = new barbearia(10);
+    static boolean dormindo = false;
+    int tempoParaCorte = 2; 
+    static barbearia b = new barbearia(2);
     
     /**
      * @param args the command line arguments
@@ -25,26 +23,29 @@ public class BarbeiroComDefeito implements Runnable{
         
         Thread cortador = new Thread(new BarbeiroComDefeito());
         cortador.start();
-        int l = 0;
+        int podeChegarGente = 0;
+        int chegouAlguem = 0;
         
+        while(chegouAlguem < 40)
+        { 
+            
+            Random chegouCliente = new Random();
+        if(chegouCliente.nextInt(100) > 40){
+            Thread cliente = new Thread(new cliente());
+            cliente.start();
+            System.out.println(chegouAlguem++);
+        }
         
-        while(l < 100)
-        {
-        Thread cliente = new Thread(new cliente());
-        cliente.start();
-        System.out.println(l);
         try{
-         TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(1);
         }
         catch(Exception e)
         {}
-        //Thread t2 = new Thread(new consumidor(b));
-        l++;
         }
         
         
         
-        System.out.println("Fim prod/cons");
+        System.out.println("Fim de Expediente, deixa eu dormi em paz");
     
     }
     
@@ -53,16 +54,31 @@ public class BarbeiroComDefeito implements Runnable{
         while(true){
             try{
                 
-                if(!b.semNinguem.tryAcquire()){
-                    System.out.println("A mimir...");
-                    b.dormindo.acquire(2);
-                }
-                else b.semNinguem.release();
-                
-                    b.eperaSentar.acquire();
-                    System.out.println("Cortando na frente, picando atrás");
+                b.dormindo.acquire();
+                if(b.semNinguem.availablePermits() > 0 ){
+                    //System.out.println(b.semNinguem.availablePermits());
+                   
+                    b.dormindo.release();
+                    
+                    
+                    
+                    System.out.println("Cortando cabelo");       
                     TimeUnit.SECONDS.sleep(tempoParaCorte);
+                    
+             
                     b.cortando.release();
+                    //b.dormindo.acquire();//tirar causa uma nao-solucao
+                }
+                else{
+                    
+                    if(!BarbeiroComDefeito.dormindo){
+                        System.out.println("A mimir...");
+                        BarbeiroComDefeito.dormindo = true;
+                    }
+                    
+                    b.dormindo.release();
+                }
+                
                 
                 
             }

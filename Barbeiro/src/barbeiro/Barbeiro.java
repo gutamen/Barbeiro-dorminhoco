@@ -7,10 +7,7 @@ package barbeiro;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/**
- *
- * @author Gustavo
- */
+
 public class barbeiro implements Runnable{
     static boolean dormindo = false;
     int tempoParaCorte = 2; 
@@ -29,7 +26,7 @@ public class barbeiro implements Runnable{
         int podeChegarGente = 0;
         int chegouAlguem = 0;
         
-        while(podeChegarGente < 40)
+        while(chegouAlguem < 40)
         { 
             
             Random chegouCliente = new Random();

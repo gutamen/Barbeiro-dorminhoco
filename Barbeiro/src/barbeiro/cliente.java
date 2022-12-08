@@ -4,10 +4,7 @@
  */
 package barbeiro;
 
-/**
- *
- * @author Gustavo
- */
+
 public class cliente implements Runnable {
     static int i = 0, o = 0, p = 0; 
     

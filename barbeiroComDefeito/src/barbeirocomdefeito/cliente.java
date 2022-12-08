@@ -4,10 +4,7 @@
  */
 package barbeirocomdefeito;
 
-/**
- *
- * @author Gustavo
- */
+
 public class cliente implements Runnable {
     static int i = 0, o = 0, p = 0; 
     
@@ -17,29 +14,35 @@ public class cliente implements Runnable {
         try{
 
             if(b.cadeiras.tryAcquire()){
-                b.cadeiras.acquire();
-                b.semNinguem.release();
-
-                if(b.dormindo.tryAcquire()) b.dormindo.release(3);
-                else b.dormindo.release();
                 
-                b.eperaSentar.release();
+
+                b.dormindo.acquire();
+                b.semNinguem.release();
+                if(BarbeiroComDefeito.dormindo){
+                    BarbeiroComDefeito.dormindo = false;
+                    System.out.println("Acorda fi do caum");
+                }
+                b.dormindo.release();
+                
+                
                 b.cortando.acquire();
-                System.out.println("Tomei uma picada " + o++);
-                b.cadeiras.release(2);
-
-
+               
+                System.out.println("Valeu pelo corte " + o++);
+                
+                b.cadeiras.release();
+                b.semNinguem.acquire();
+                //b.dormindo.release();//tirar causa uma nao-solucao
             }
             else{
-                b.cadeiras.release(); 
+                 
                 System.out.println("ta chei fui embora " + p++);
             }
         }
 
         catch(Exception e)
         {}
-
         
+
     }
             
     
