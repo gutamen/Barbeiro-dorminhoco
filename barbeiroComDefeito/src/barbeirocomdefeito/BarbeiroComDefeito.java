@@ -26,11 +26,11 @@ public class BarbeiroComDefeito implements Runnable{
         int podeChegarGente = 0;
         int chegouAlguem = 0;
         
-        while(chegouAlguem < 40)
+        while(chegouAlguem < 10)
         { 
             
             Random chegouCliente = new Random();
-        if(chegouCliente.nextInt(100) > 40){
+        if(chegouCliente.nextInt(100) > 20){
             Thread cliente = new Thread(new cliente());
             cliente.start();
             System.out.println(chegouAlguem++);
