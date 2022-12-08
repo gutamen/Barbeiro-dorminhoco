@@ -10,7 +10,7 @@ public class cliente implements Runnable {
     
     
     
-    synchronized void chega(barbearia b){
+    void chega(barbearia b){
         try{
 
             if(b.cadeiras.tryAcquire()){

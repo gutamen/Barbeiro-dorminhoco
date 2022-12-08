@@ -50,7 +50,7 @@ public class BarbeiroComDefeito implements Runnable{
     }
     
     
-    synchronized public void trabalha(barbearia b){
+    public void trabalha(barbearia b){
         while(true){
             try{
                 
